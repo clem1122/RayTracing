@@ -26,7 +26,8 @@ float hit_sphere(const vec3 center, float radius, const ray& r) {
 vec3 color(const ray& r, hitable *world) {
 	hit_record rec;
 	if (world->hit(r, 0.001, MAXFLOAT, rec)) {
-		return 0.5 * rec.normal + vec3(0.5, 0.5, 0.5);
+		vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+		return 0.5 * color(ray(rec.p, target-rec.p), world);
 	} else {
 		vec3 unit_dir = unit_vector(r.direction());
 		float t = 0.5*(unit_dir.y() + 1.0);
