@@ -1,14 +1,42 @@
 #include <iostream>
 #include "sdltemplate.h"
-#include "ray.h"
+#include "hitable_list.h"
+#include "sphere.h"
 
-vec3 color(const ray& r) {
-	vec3 unit_dir = unit_vector(r.direction());
-	float t = 0.5*(unit_dir.y() + 1.0);
-	return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+/*
+float hit_sphere(const vec3 center, float radius, const ray& r) {
+	vec3 oc = r.origin() - center;
+	float a = r.direction().length_squared(); // !!!
+	float b = 2.0 * dot(oc, r.direction());
+	float c = oc.length_squared() - radius * radius;
+	
+	float discriminant = b * b - 4 * a * c;
+	if (discriminant < 0){
+		return -1.0;
+	} else {
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
+	
+}*/
+
+//vec3 sphere;
+//float sphere_radius;
+
+vec3 color(const ray& r, hitable *world) {
+	hit_record rec;
+	if (world->hit(r, 0.001, MAXFLOAT, rec)) {
+		return 0.5 * rec.normal + vec3(0.5, 0.5, 0.5);
+	} else {
+		vec3 unit_dir = unit_vector(r.direction());
+		float t = 0.5*(unit_dir.y() + 1.0);
+		return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0); //lerp between 2 colors	
+	}
 }
 
+
 int main(){
+	//sphere = vec3(0, 0, -1);
+	//sphere_radius = 0.5;
 	int width = 800;
 	int height = 400;
 	std::cout << "P3\n" << width << " " << height << "\n255\n";
@@ -20,13 +48,20 @@ int main(){
 	vec3 vertical(0.0, 2.0, 0.0);
 	vec3 origin(0.0, 0.0, 0.0);
 	
+	hitable *list[2];
+	list[0] = new sphere(vec3(0, 0, -1), 0.5);
+	list[1] = new sphere(vec3(0, -100.5, -1), 100);
+	
+	hitable *world = new hitable_list(list, 2);
+	
 	for(int y = height-1; y >= 0; y--){
 		for(int x = 0; x < width; x++){
 			float u = float(x) / float(width);
 			float v = float(y) / float(height);
 			ray r(origin, lower_left_corner + u * horizontal + v * vertical);
 			//vec3 col(float(x) / float(width), float(y) / float(height),0.2);
-			vec3 col = color(r);
+			vec3 p = r.point_at_parameter(2.0);
+			vec3 col = color(r, world);
 			int ir = int(255.99*col[0]);
 			int ig = int(255.99*col[1]);
 			int ib = int(255.99*col[2]);
