@@ -1,9 +1,11 @@
 #include <iostream>
+#include <cstdlib>
 #include "sdltemplate.h"
 #include "hitable_list.h"
 #include "sphere.h"
 #include "camera.h"
 #include "material.h"
+
 vec3 color(const ray& r, hitable *world, int depth) {
 	hit_record rec;
 	if (world->hit(r, 0.001, MAXFLOAT, rec)) {
@@ -22,12 +24,14 @@ vec3 color(const ray& r, hitable *world, int depth) {
 }
 
 
-int main(){
+int main(int argc, char** argv){
 
 	
 	int width = 800;
 	int height = 400;
-	int ns = 250;
+	int ns = 80;
+	if (argc >1) {ns = std::atoi(argv[1]);} 
+
 	
 	
 	std::cout << "P3\n" << width << " " << height << "\n255\n";
@@ -44,7 +48,15 @@ int main(){
 	list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dielectric(1.5));
 	
 	hitable *world = new hitable_list(list, 5);
-	camera cam;
+	//camera cam;
+	/*
+	hitable *list[2];
+	float R = cos(M_PI/4);
+	list[0] = new sphere(vec3(-R, 0, -1), R, new lambertian(vec3(0,0,1)));
+	list[1] = new sphere(vec3(R, 0, -1), R, new lambertian(vec3(1,0,0)));
+	
+	hitable *world = new hitable_list(list, 2);*/
+	camera cam(vec3(-2, 2, 1), vec3(0, 0, 1), vec3(0,1,0), 90, float(width)/float(height));
 	for(int y = height-1; y >= 0; y--){
 		for(int x = 0; x < width; x++){
 			vec3 col(0,0,0);
