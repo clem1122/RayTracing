@@ -56,7 +56,12 @@ int main(int argc, char** argv){
 	list[1] = new sphere(vec3(R, 0, -1), R, new lambertian(vec3(1,0,0)));
 	
 	hitable *world = new hitable_list(list, 2);*/
-	camera cam(vec3(-2, 2, 1), vec3(0, 0, 1), vec3(0,1,0), 90, float(width)/float(height));
+	vec3 lookfrom(3,3,2);
+	vec3 lookat(0,0,-1);
+	float dist_to_focus = (lookfrom-lookat).length();
+	float aperture = 0.5;
+	
+	camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(width)/float(height), aperture, dist_to_focus);
 	for(int y = height-1; y >= 0; y--){
 		for(int x = 0; x < width; x++){
 			vec3 col(0,0,0);
