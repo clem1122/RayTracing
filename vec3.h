@@ -152,6 +152,10 @@ vec3 random_in_unit_sphere(){
 	return p;
 }
 
+vec3 reflect(const vec3& v, const vec3& n) {
+	return v - 2*dot(v, n) * n;
+}
+
 
 
 
