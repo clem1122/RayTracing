@@ -1,18 +1,18 @@
 #include <limits>
 
-const float infinity = std::numeric_limits<double>::infinity();
-const float neg_infinity = -std::numeric_limits<double>::infinity();
+const float infinity = std::numeric_limits<float>::infinity();
+const float neg_infinity = -std::numeric_limits<float>::infinity();
 
 class interval {
 public:
-	double min, max;
+	float min, max;
 	
 	interval() : min(infinity), max(neg_infinity) {}
-	interval(double min, double max) : min(min), max(max) {}
+	interval(float m, float M) : min(m), max(M) {}
 	
-	double size() const {return max - min;}
-	bool contains(double x) {return (x >= min && x <= max);}
-	bool surrounds(double x){return (x >  min && x < max);}
+	float size() const {return max - min;}
+	bool contains(float x) {return (x >= min && x <= max);}
+	bool surrounds(float x){return (x >  min && x < max);}
 	
 	static const interval empty;
 	static const interval universe;

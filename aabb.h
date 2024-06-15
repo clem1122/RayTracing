@@ -7,7 +7,7 @@ public:
 	
 	aabb();
 	
-	aabb(const interval& x, const interval& y, const interval& z) : x(x), y(y), z(z) {}
+	aabb(const interval& x_, const interval& y_, const interval& z_) : x(x_), y(y_), z(z_) {}
 	
 	aabb(const vec3& a, const vec3& b) {
 		x = (a[0] <= b[0]) ? interval(a[0], b[0]) : interval(b[0], a[0]);

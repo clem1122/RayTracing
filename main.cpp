@@ -9,7 +9,7 @@
 
 vec3 color(const ray& r, hitable *world, int depth) {
 	hit_record rec;
-	if (world->hit(r, 0.001, MAXFLOAT, rec)) {
+	if (world->hit(r, interval(0.001, MAXFLOAT), rec)) {
 		ray scattered;
 		vec3 attenuation;
 		if(depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
@@ -96,7 +96,6 @@ int main(int argc, char** argv){
 				float u = float(x + drand48()) / float(width);
 				float v = float(y + drand48()) / float(height);
 				ray r = cam.get_ray(u,v);
-				vec3 p = r.point_at_parameter(2.0);
 				col += color(r, world, 0);
 			}
 			col /= ns;
