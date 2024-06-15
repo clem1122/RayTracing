@@ -1,20 +1,25 @@
 #pragma once
 #include "hitable.h"
+#include "aabb.h"
 
 class material;
-
 
 class sphere: public hitable {
 public:
 	vec3 center;
 	float radius;
 	material *mat_ptr;
+	aabb bbox;
 
 	
 	sphere();
-	sphere(vec3 cen, float r, material *m) : center(cen), radius(r), mat_ptr(m) {};
+	sphere(vec3 cen, float r, material *m) : center(cen), radius(r), mat_ptr(m) {
+		vec3 radius_vector = vec3(radius, radius, radius);
+		bbox = aabb(center - radius_vector, center + radius_vector);
+	};
 	
 	bool hit(const ray& r, interval ray_t, hit_record& rec) const override;
+	aabb bounding_box() const override { return bbox; }
 };
 
 bool sphere::hit(const ray& r, interval ray_t, hit_record& rec) const {

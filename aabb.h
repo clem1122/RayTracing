@@ -5,15 +5,12 @@ class aabb {
 public:
 	interval x,y,z;
 	
-	aabb();
+	aabb() {}
 	
 	aabb(const interval& x_, const interval& y_, const interval& z_) : x(x_), y(y_), z(z_) {}
 	
-	aabb(const vec3& a, const vec3& b) {
-		x = (a[0] <= b[0]) ? interval(a[0], b[0]) : interval(b[0], a[0]);
-		y = (a[1] <= b[1]) ? interval(a[1], b[1]) : interval(b[1], a[1]);
-		z = (a[2] <= b[2]) ? interval(a[2], b[2]) : interval(b[2], a[2]);
-	}
+	aabb(const vec3& a, const vec3& b);
+	aabb(const aabb& a, const aabb& b);
 	
 	const interval& axis_interval(int n) const {
 		if (n == 0) return x;
@@ -46,8 +43,19 @@ public:
 		return true;
 	
 	}
-
-
-
-
 };
+
+
+aabb::aabb(const vec3& a, const vec3& b) {
+	x = (a[0] <= b[0]) ? interval(a[0], b[0]) : interval(b[0], a[0]);
+	y = (a[1] <= b[1]) ? interval(a[1], b[1]) : interval(b[1], a[1]);
+	z = (a[2] <= b[2]) ? interval(a[2], b[2]) : interval(b[2], a[2]);
+}
+
+aabb::aabb(const aabb& a, const aabb& b) {
+	x = interval(a.x, b.x);
+	y = interval(a.y, b.y);
+	z = interval(a.z, b.z);
+}
+
+
