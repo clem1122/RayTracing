@@ -3,11 +3,13 @@
 
 class material;
 
+
 class sphere: public hitable {
 public:
 	vec3 center;
 	float radius;
 	material *mat_ptr;
+
 	
 	sphere();
 	sphere(vec3 cen, float r, material *m) : center(cen), radius(r), mat_ptr(m) {};

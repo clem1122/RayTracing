@@ -1,8 +1,10 @@
 #pragma once 
 #include "ray.h"
+#include "aabb.h"
 
 
 class material;
+
 
 struct hit_record {
 	float t;
@@ -14,4 +16,6 @@ struct hit_record {
 class hitable{
 public:
 	virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+	
+	//virtual aabb bounding_box() const = 0;
 };
